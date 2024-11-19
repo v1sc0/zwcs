@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zero-Width Text Steganography</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Estilos gerais */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            max-width: 100%;
+            overflow-x: hidden;
+            margin: 0 auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .counter, .types-title {
+            font-size: 12px;
+            color: gray;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        ul {
+            padding-left: 20px;
+            font-size: 12px;
+            color: gray;
+            margin-top: 5px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-item input {
+            margin-right: 5px;
+        }
+
+        .messages-container h4 {
+            margin-bottom: 1px;
+        }
+
+        .messages-container {
+            margin-bottom: 20px;
+        }
+
+        .secret-key-container h4 {
+            margin-bottom: 3px;
+        }
+
+        .zero-width-options-container h4 {
+            margin-bottom: 3px;
+        }
+
+        /* Estilo para alinhar o campo de entrada e o botão na mesma linha */
+        .secret-key-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .input-row {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 5px;
+            width: 100%;
+        }
+
+        #secret-key {
+            flex-grow: 1;
+            padding: 4px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            vertical-align: middle;
+        }
+
+        #toggle-secret-key-btn {
+            width: 60px;
+            padding: 4px 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+        }
+
+        /* Estilo para alinhar Encode e Decode na mesma linha */
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .button-row button {
+            flex: 1;
+            width: auto;
+        }
+
+        /* Estilo para alinhar Clear All e Copy to Clipboard na mesma linha */
+        .action-button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-button-row button {
+            flex: 1;
+            width: auto;
+        }
+        h3 {
+        margin-top: 1px; /* Ajuste conforme necessário para reduzir o espaço */
+        }
+    </style>
+</head>
+<body>
+    <h3>Zero-Width Text Steganography</h3>
+    
+    <div class="messages-container">
+        <h4>Messages:</h4>
+        <textarea id="original-text" placeholder="Original Text"></textarea>
+        <div class="counter" id="original-text-counter">0 characters</div>
+        
+        <textarea id="hidden-text" placeholder="Text to Hide"></textarea>
+        <div class="counter" id="hidden-text-counter">0 characters</div>
+    </div>
+
+    <!-- Campo da chave secreta -->
+    <div class="secret-key-container">
+        <label for="secret-key"><strong>Secret Key (Cryptography):</strong></label>
+        <div class="input-row">
+            <input type="password" id="secret-key" placeholder="Enter Secret Key (Optional)">
+            <button id="toggle-secret-key-btn">View</button>
+        </div>
+    </div>
+
+    <div class="zero-width-options-container">
+        <h4>Choose the characters to be used:</h4>
+        <div id="zero-width-options" class="checkbox-container">
+            <div class="column">
+                <label class="checkbox-item"><input type="checkbox" value="&#x200b"> U+200B</label>
+                <label class="checkbox-item"><input type="checkbox" value="&#x200c" checked> U+200C</label>
+                <label class="checkbox-item"><input type="checkbox" value="&#x200d" checked> U+200D</label>
+                <label class="checkbox-item"><input type="checkbox" value="&#x200e"> U+200E</label>
+                <label class="checkbox-item"><input type="checkbox" value="&#x202a"> U+202A</label>
+            </div>
+            <div class="column">
+                <label class="checkbox-item"><input type="checkbox" value="&#x202c" checked> U+202C</label>
+                <label class="checkbox-item"><input type="checkbox" value="&#x202d"> U+202D</label>
+                <label class="checkbox-item"><input type="checkbox" value="&#x2062"> U+2062</label>
+                <label class="checkbox-item"><input type="checkbox" value="&#x2063"> U+2063</label>
+                <label class="checkbox-item"><input type="checkbox" value="&#xfeff" checked> U+FEFF</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botões Encode e Decode alinhados na mesma linha -->
+    <div class="button-row">
+        <button id="encode-btn">Encode</button>
+        <button id="decode-btn">Decode</button>
+    </div>
+
+    <textarea id="result-text" placeholder="Result..." readonly></textarea>
+    <div class="counter" id="result-text-counter">0 characters</div>
+
+    <!-- Botões Clear All e Copy to Clipboard alinhados na mesma linha -->
+    <div class="action-button-row">
+        <button id="clear-btn">Clear All</button>
+        <button id="copy-btn">Copy to Clipboard</button>
+    </div>
+
+    <button id="highlight-btn">Detect Zero-Width Characters</button>
+    <div id="zero-width-count" class="counter">Zero-width characters: 0</div>
+    <div id="zero-width-types-title" class="types-title" style="display: none;">Zero-width types:</div>
+    <ul id="zero-width-types"></ul>
+
+    <script src="unicode_steganography.js"></script>
+    <script src="crypto-js.min.js"></script>
+    <script src="popup.js"></script>
+
+</body>
+</html>
