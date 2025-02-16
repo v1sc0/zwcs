@@ -162,6 +162,7 @@
             <input type="password" id="secret-key" placeholder="Enter Secret Key (Optional)">
             <button id="toggle-secret-key-btn">View</button>
         </div>
+        <div class="counter" id="secret-key-counter">0 characters</div>
     </div>
 
     <div class="zero-width-options-container">
@@ -207,11 +208,6 @@
         <button id="clear-btn">Clear All</button>
         <button id="copy-btn">Copy to Clipboard</button>
     </div>
-
-    <button id="highlight-btn">Detect Zero-Width Characters</button>
-    <div id="zero-width-count" class="counter">Zero-width characters: 0</div>
-    <div id="zero-width-types-title" class="types-title" style="display: none;">Zero-width types:</div>
-    <ul id="zero-width-types"></ul>
 
     <script src="unicode_steganography.js"></script>
     <script src="crypto-js.min.js"></script>
