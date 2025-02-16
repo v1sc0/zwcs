@@ -97,6 +97,7 @@ function updateCharacterCount() {
   document.getElementById('original-text-counter').textContent = `${document.getElementById('original-text').value.length} characters`;
   document.getElementById('hidden-text-counter').textContent = `${document.getElementById('hidden-text').value.length} characters`;
   document.getElementById('result-text-counter').textContent = `${document.getElementById('result-text').value.length} characters`;
+  document.getElementById('secret-key-counter').textContent = `${document.getElementById('secret-key').value.length} characters`;
 }
 
 // Função para limpar todas as áreas de texto
@@ -114,44 +115,12 @@ function copyToClipboard() {
   document.execCommand('copy');
 }
 
-// Função para destacar caracteres de largura zero e exibir tipos encontrados
-function highlightZeroWidthCharacters() {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { action: 'highlightZeroWidth' }, (response) => {
-          if (response && response.count !== undefined) {
-              // Atualizar a contagem de caracteres
-              document.getElementById('zero-width-count').textContent = `Zero-width Count: ${response.count}`;
-              
-              // Exibir os tipos de caracteres encontrados
-              const typesList = document.getElementById('zero-width-types');
-              const typesTitle = document.getElementById('zero-width-types-title');
-              typesList.innerHTML = ''; // Limpar a lista anterior
-              
-              if (response.types.length > 0) {
-                  // Mostrar título e preencher a lista
-                  typesTitle.style.display = 'block';
-                  response.types.forEach((type) => {
-                      const listItem = document.createElement('li');
-                      listItem.textContent = type;
-                      typesList.appendChild(listItem);
-                  });
-              } else {
-                  // Ocultar título se nenhum tipo for encontrado
-                  typesTitle.style.display = 'none';
-              }
-          }
-      });
-  });
-}
-
-// Event listener para o botão de destaque
-document.getElementById('highlight-btn').addEventListener('click', highlightZeroWidthCharacters);
-
 document.getElementById('clear-btn').addEventListener('click', clearAllFields);
 document.getElementById('copy-btn').addEventListener('click', copyToClipboard);
 document.getElementById('original-text').addEventListener('input', updateCharacterCount);
 document.getElementById('hidden-text').addEventListener('input', updateCharacterCount);
 document.getElementById('result-text').addEventListener('input', updateCharacterCount);
+document.getElementById('secret-key').addEventListener('input', updateCharacterCount);
 
 // Inicializa contadores
 updateCharacterCount();
@@ -174,7 +143,5 @@ document.addEventListener('DOMContentLoaded', function() {
               toggleButton.textContent = 'View';
           }
       });
-  } else {
-      console.log("Botão ou campo de senha não encontrado");
   }
 });
